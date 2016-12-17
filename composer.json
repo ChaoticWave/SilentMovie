@@ -1,0 +1,62 @@
+{
+    "name":              "chaoticwave/silent-movie",
+    "description":       "Movie Data Analysis Tool",
+    "keywords":          [
+        "elasticsearch",
+        "media",
+        "movies",
+        "analysis",
+        "research"
+    ],
+    "license":           "MIT",
+    "type":              "project",
+    "minimum-stability": "dev",
+    "prefer-dist":       false,
+    "require":           {
+        "php":                     ">=5.6.4",
+        "chaoticwave/blue-velvet": "1.0.*",
+        "laravel/framework":       "5.3.*"
+    },
+    "require-dev":       {
+        "fzaninotto/faker":            "~1.4",
+        "mockery/mockery":             "0.9.*",
+        "phpunit/phpunit":             "~5.0",
+        "symfony/css-selector":        "3.1.*",
+        "barryvdh/laravel-ide-helper": "^2.2",
+        "symfony/dom-crawler":         "3.1.*",
+        "doctrine/dbal":               "~2.3"
+    },
+    "autoload":          {
+        "classmap": [
+            "database"
+        ],
+        "psr-4":    {
+            "ChaoticWave\\SilentMovie\\":        "app/",
+            "ChaoticWave\\SilentMovie\\Tests\\": "tests/"
+        }
+    },
+    "autoload-dev":      {
+        "classmap": []
+    },
+    "extra":             {
+        "branch-alias": {
+            "dev-develop": "1.x-dev"
+        }
+    },
+    "scripts":           {
+        "post-root-package-install": [
+            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd":   [
+            "php artisan key:generate"
+        ],
+        "post-install-cmd":          [
+            "Illuminate\\Foundation\\ComposerScripts::postInstall",
+            "php artisan optimize"
+        ],
+        "post-update-cmd":           [
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "php artisan optimize"
+        ]
+    }
+}
