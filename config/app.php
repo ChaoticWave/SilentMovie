@@ -13,6 +13,9 @@ return [
     'cipher'          => 'AES-256-CBC',
     'log'             => env('APP_LOG', 'single'),
     'log_level'       => env('APP_LOG_LEVEL', 'debug'),
+    //******************************************************************************
+    //* Service providers
+    //******************************************************************************
     'providers'       => [
         Illuminate\Auth\AuthServiceProvider::class,
         Illuminate\Broadcasting\BroadcastServiceProvider::class,
@@ -36,16 +39,22 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        //******************************************************************************
+        //* App
+        //******************************************************************************
         ChaoticWave\SilentMovie\Providers\AppServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\AuthServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\EventServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\RouteServiceProvider::class,
-
+        ChaoticWave\SilentMovie\Providers\ImdbServiceProvider::class,
+        // ChaoticWave\SilentMovie\Providers\OmdbServiceProvider::class,
+        //******************************************************************************
+        //* Third Party
+        //******************************************************************************
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
-
-    'aliases' => [
+    'aliases'         => [
+        'ApiManager'   => ChaoticWave\SilentMovie\Managers\ApiManager::class,
         'App'          => Illuminate\Support\Facades\App::class,
         'Artisan'      => Illuminate\Support\Facades\Artisan::class,
         'Auth'         => Illuminate\Support\Facades\Auth::class,

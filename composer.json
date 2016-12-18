@@ -13,9 +13,10 @@
     "minimum-stability": "dev",
     "prefer-dist":       false,
     "require":           {
-        "php":                     ">=5.6.4",
-        "chaoticwave/blue-velvet": "1.0.*",
-        "laravel/framework":       "5.3.*"
+        "php":                         ">=5.6.4",
+        "chaoticwave/blue-velvet":     "1.0.*",
+        "laravel/framework":           "5.3.*",
+        "elasticsearch/elasticsearch": ">=2.0.0"
     },
     "require-dev":       {
         "fzaninotto/faker":            "~1.4",

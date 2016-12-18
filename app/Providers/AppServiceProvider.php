@@ -1,6 +1,4 @@
-<?php
-
-namespace ChaoticWave\SilentMovie\Providers;
+<?php namespace ChaoticWave\SilentMovie\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
