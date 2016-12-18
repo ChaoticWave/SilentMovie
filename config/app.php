@@ -54,7 +54,6 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
     'aliases'         => [
-        'ApiManager'   => ChaoticWave\SilentMovie\Managers\ApiManager::class,
         'App'          => Illuminate\Support\Facades\App::class,
         'Artisan'      => Illuminate\Support\Facades\Artisan::class,
         'Auth'         => Illuminate\Support\Facades\Auth::class,

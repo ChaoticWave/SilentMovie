@@ -37,7 +37,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
     {
         parent::__construct($app);
 
-        $this->config = $config;
+        $this->config = !empty($config) ? $config : config('media.apis.imdb');
     }
 
     //******************************************************************************
@@ -75,4 +75,14 @@ class ImdbService extends BaseService implements SearchesMediaApis
 
         return new ApiResponse($_result);
     }
+
+    protected function addPerson($person)
+    {
+        $_approx = array_get($person, 'name_approx');
+        $_popular = array_get($person, 'name_popular');
+        $_exact = array_get($person, 'name_exact');
+        $_substring = array_get($person, 'name_substring');
+        //  Push to ES
+    }
+
 }
