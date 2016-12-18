@@ -1,6 +1,4 @@
-<?php
-
-namespace ChaoticWave\SilentMovie\Http\Controllers;
+<?php namespace ChaoticWave\SilentMovie\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
