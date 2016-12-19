@@ -7,8 +7,8 @@ return [
         'imdb' => [
             'service'   => 'imdb',
             'endpoints' => [
-                'person' => 'http://www.imdb.com/xml/find?json=1&nm=on',
-                'title'  => 'http://www.imdb.com/xml/find?json=1&tt=on',
+                'person' => 'http://www.imdb.com/xml/find?json=1&s=all&nm=on',
+                'title'  => 'http://www.imdb.com/xml/find?json=1&s=all&tt=on',
             ],
         ],
         'omdb' => [

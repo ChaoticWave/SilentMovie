@@ -4,7 +4,9 @@ use ChaoticWave\BlueVelvet\Services\BaseService;
 use ChaoticWave\BlueVelvet\Traits\Curly;
 use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
 use ChaoticWave\SilentMovie\Contracts\SearchesMediaApis;
-use ChaoticWave\SilentMovie\Responses\ApiResponse;
+use ChaoticWave\SilentMovie\Enums\MediaDataSources;
+use ChaoticWave\SilentMovie\Responses\PeopleResponse;
+use ChaoticWave\SilentMovie\Responses\TitleResponse;
 
 class ImdbService extends BaseService implements SearchesMediaApis
 {
@@ -54,10 +56,11 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchPeople($text, $options = array())
     {
-        $_result = $this->httpGet(array_get($this->config, 'endpoints.person'), array_merge($options, ['q' => $text]));
+        $_result = $this->httpGet(array_get($this->config, 'endpoints.person'), array_merge($options, ['q' => urlencode($text)]));
         is_string($_result) && $_result = json_decode($_result, true);
+        $_result['source'] = MediaDataSources::IMDB;
 
-        return new ApiResponse($_result);
+        return new PeopleResponse($_result);
     }
 
     /**
@@ -70,19 +73,15 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchTitle($text, $options = array())
     {
-        $_result = $this->httpGet(array_get($this->config, 'endpoints.title'), array_merge($options, ['q' => $text]));
+        $_result = $this->httpGet(array_get($this->config, 'endpoints.title'), array_merge($options, ['q' => urlencode($text)]));
         is_string($_result) && $_result = json_decode($_result, true);
+        $_result['source'] = MediaDataSources::IMDB;
 
-        return new ApiResponse($_result);
+        return new TitleResponse($_result);
     }
 
     protected function addPerson($person)
     {
-        $_approx = array_get($person, 'name_approx');
-        $_popular = array_get($person, 'name_popular');
-        $_exact = array_get($person, 'name_exact');
-        $_substring = array_get($person, 'name_substring');
-        //  Push to ES
     }
 
 }

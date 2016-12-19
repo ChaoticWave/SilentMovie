@@ -1,16 +1,11 @@
 <?php namespace ChaoticWave\SilentMovie\Responses;
 
-use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
-use ChaoticWave\SilentMovie\Documents\HitDocument;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-
-class TitleResponse extends ApiResponse
+class TitleResponse extends MatchResponse
 {
     //******************************************************************************
     //* Members
     //******************************************************************************
-    //******************************************************************************
-    //* Methods
-    //******************************************************************************
+
+    /** @inheritdoc */
+    protected $prefix = 'title_';
 }

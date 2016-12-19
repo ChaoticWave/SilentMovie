@@ -5,7 +5,7 @@ use ChaoticWave\SilentMovie\Documents\HitDocument;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 
-class ApiResponse implements Arrayable, Jsonable, ApiResponseLike
+class ElasticResponse implements Arrayable, Jsonable, ApiResponseLike
 {
     //******************************************************************************
     //* Members

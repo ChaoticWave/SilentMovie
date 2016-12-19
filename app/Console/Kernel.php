@@ -1,6 +1,6 @@
 <?php namespace ChaoticWave\SilentMovie\Console;
 
-use ChaoticWave\BlueVelvet\Console\Commands\Strip;
+use ChaoticWave\SilentMovie\Console\Commands\Lookup;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -8,7 +8,7 @@ class Kernel extends ConsoleKernel
 {
     /** @inheritdoc */
     protected $commands = [
-        Strip::class,
+        Lookup::class,
     ];
 
     /** @inheritdoc */
