@@ -43,9 +43,13 @@ class BaseApiResponse implements ApiResponseLike
     public function __construct(array $response = [])
     {
         $this->raw = $this->response = $this->getArrayableItems($response);
-
         $this->source = array_pull($this->response, 'source');
-        empty($this->mapping) and $this->mapping = array_pull($this->response, 'mapping');
+
+        $_mapping = $this->getMapping();
+
+        if (empty($_mapping) && null !== ($_mapping = array_pull($this->response, 'mapping'))) {
+            $this->mapping = $_mapping;
+        }
     }
 
     /**
@@ -55,7 +59,7 @@ class BaseApiResponse implements ApiResponseLike
     {
         $_array = [];
 
-        foreach ($this->mapping as $_prop) {
+        foreach ($this->getMapping() as $_prop) {
             $_array[$_prop] = $this->{$_prop};
         }
 
@@ -158,5 +162,13 @@ class BaseApiResponse implements ApiResponseLike
     public function getMapping()
     {
         return $this->mapping;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSource()
+    {
+        return $this->source;
     }
 }

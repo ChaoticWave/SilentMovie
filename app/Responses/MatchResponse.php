@@ -55,7 +55,7 @@ class MatchResponse extends BaseApiResponse
     protected function loadEntities()
     {
         foreach ($this->response as $_key => $_value) {
-            if (in_array($_prop = str_replace($this->prefix, null, $_key), $this->mapping)) {
+            if (in_array($_prop = str_replace($this->prefix, null, $_key), $this->getMapping())) {
                 $this->{$_prop} = $_hits = array_pull($this->response, $_key);
 
                 if (!is_array($_hits) && !($_hits instanceof \Traversable)) {
@@ -72,5 +72,45 @@ class MatchResponse extends BaseApiResponse
                 unset($_entities);
             }
         }
+    }
+
+    /**
+     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     */
+    public function getExact()
+    {
+        return $this->exact;
+    }
+
+    /**
+     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     */
+    public function getPopular()
+    {
+        return $this->popular;
+    }
+
+    /**
+     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     */
+    public function getSubstring()
+    {
+        return $this->substring;
+    }
+
+    /**
+     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     */
+    public function getApprox()
+    {
+        return $this->approx;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
+        return $this->prefix;
     }
 }
