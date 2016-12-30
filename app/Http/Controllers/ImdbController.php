@@ -1,13 +1,7 @@
 <?php namespace ChaoticWave\SilentMovie\Http\Controllers;
 
-use ChaoticWave\BlueVelvet\Providers\BaseServiceProvider;
-use ChaoticWave\BlueVelvet\Traits\Curly;
 use ChaoticWave\SilentMovie\Facades\ImdbApi;
-use ChaoticWave\SilentMovie\Http\Controllers\Controller;
-use ChaoticWave\SilentMovie\Managers\ApiManager;
-use ChaoticWave\SilentMovie\Services\OmdbService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
 
 class ImdbController extends Controller
 {
@@ -22,11 +16,12 @@ class ImdbController extends Controller
      */
     public function search(Request $request)
     {
-        $_result = ImdbApi::searchPeople($request->get('search-person'));
+        $_result = ImdbApi::searchPeople($_query = $request->get('search-person'));
 
-        return view('home',
+        return view('search',
             [
-                'search'       => $_result,
+                'search'       => $_result->mappedArray(),
+                'searchQuery'  => $_query,
                 'searchText'   => var_export($_result, true),
                 'totalResults' => data_get($_result, 'totalResults'),
             ]);

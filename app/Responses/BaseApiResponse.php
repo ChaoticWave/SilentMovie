@@ -57,13 +57,7 @@ class BaseApiResponse implements ApiResponseLike
      */
     public function mappedArray()
     {
-        $_array = [];
-
-        foreach ($this->getMapping() as $_prop) {
-            $_array[$_prop] = $this->{$_prop};
-        }
-
-        return $_array;
+        return array_only($this->toArray(), $this->getMapping());
     }
 
     /**
@@ -79,17 +73,14 @@ class BaseApiResponse implements ApiResponseLike
             $_array[$_prop] = $this->{$_prop};
         }
 
-        foreach ($this->mappedArray() as $_name => $_value) {
-            if (is_array($_value)) {
-                /**
-                 * @var int    $_index
-                 * @var Entity $_entity
-                 */
-                foreach ($_value as $_index => $_entity) {
-                    $_array[$_name][] = $_entity instanceof Entity ? $_entity->toArray() : $_entity;
+        foreach ($this->getMapping() as $_map) {
+            $_results = $this->{$_map};
+            $_array[$_map] = null;
+
+            if (!empty($_results)) {
+                foreach ($_results as $_index => $_entity) {
+                    $_array[$_map][] = $_entity instanceof Entity ? $_entity->toArray() : $_entity;
                 }
-            } else {
-                $_array[$_name] = $_value;
             }
         }
 

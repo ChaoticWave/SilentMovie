@@ -9,3 +9,9 @@ Route::get('/',
     });
 
 Route::post('/', ['uses' => 'ImdbController@search']);
+Route::get('/search',
+    function() {
+        return view('search');
+    });
+
+Route::post('/search', ['uses' => 'ImdbController@search']);

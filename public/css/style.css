@@ -9,6 +9,7 @@ label {
     font-family: Lato, sans-serif;
     font-size:   18px;
     text-align:  left;
+    color:       rgba(255, 255, 255, .8);
 }
 
 .content-section {
@@ -19,6 +20,40 @@ label {
     font-size:     14px;
     font-family:   Lato, sans-serif;
     margin-bottom: 25px;
+}
+
+.intro-body h1 {
+    margin-bottom: 0;
+}
+
+.inner-subtext {
+    font-size:     18px;
+    font-family:   Lato, sans-serif;
+    margin-bottom: 25px;
+}
+
+.control-label {
+    line-height: 34px;
+    min-height:  34px;
+}
+
+.panel {
+    margin-bottom:  5px;
+    padding-bottom: 0;
+}
+
+.panel .form-group {
+    margin-bottom: 0;
+}
+
+.panel-body .control-label {
+    color: #666;
+}
+
+.panel-body p.form-control-static {
+    color:          #333;
+    padding-bottom: 5px;
+    margin-bottom:  0;
 }
 
 @media (min-width: 767px) {
