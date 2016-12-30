@@ -58,9 +58,8 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchPeople($text, $options = array())
     {
-        /** @var MediaQuery $_query */
-        if (null !== ($_query = MediaQuery::where('user_id', 0)->where('source_nbr', MediaDataSources::IMDB)->where('query_text', $text)->first())) {
-            return new PeopleResponse($_query->response_text);
+        if (false !== ($_cache = $this->checkQueryCache($text))) {
+            return $_cache;
         }
 
         $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.person'), array_merge($options, ['q' => urlencode($text)]));
@@ -104,4 +103,16 @@ class ImdbService extends BaseService implements SearchesMediaApis
     {
     }
 
+    /**
+     * @param string $query
+     *
+     * @return \ChaoticWave\SilentMovie\Responses\PeopleResponse
+     */
+    protected function checkQueryCache($query)
+    {
+        $_cache = MediaQuery::whereRaw('user_id = :user_id AND source_nbr = :source_nbr AND query_text = :query_text',
+            [':user_id' => 0, ':source_nbr' => MediaDataSources::IMDB, 'query_text' => $query])->first();
+
+        return $_cache ? new PeopleResponse($_cache->response_text) : false;
+    }
 }
