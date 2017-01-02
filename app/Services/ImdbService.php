@@ -6,8 +6,10 @@ use ChaoticWave\BlueVelvet\Traits\Curly;
 use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
 use ChaoticWave\SilentMovie\Contracts\SearchesMediaApis;
 use ChaoticWave\SilentMovie\Database\Models\MediaQuery;
+use ChaoticWave\SilentMovie\Documents\DocumentFactory;
 use ChaoticWave\SilentMovie\Enums\MediaDataSources;
 use ChaoticWave\SilentMovie\Responses\PeopleResponse;
+use ChaoticWave\SilentMovie\Responses\ResponseFactory;
 use ChaoticWave\SilentMovie\Responses\TitleResponse;
 
 class ImdbService extends BaseService implements SearchesMediaApis
@@ -17,6 +19,19 @@ class ImdbService extends BaseService implements SearchesMediaApis
     //******************************************************************************
 
     use Curly;
+
+    //******************************************************************************
+    //* Constants
+    //******************************************************************************
+
+    /**
+     * @var string
+     */
+    const PERSON_ENDPOINT_NAME = 'person';
+    /**
+     * @var string
+     */
+    const TITLE_ENDPOINT_NAME = 'title';
 
     //******************************************************************************
     //* Members
@@ -56,30 +71,9 @@ class ImdbService extends BaseService implements SearchesMediaApis
      *
      * @return ApiResponseLike
      */
-    public function searchPeople($text, $options = array())
+    public function searchPeople($text, $options = [])
     {
-        if (false !== ($_cache = $this->checkQueryCache($text))) {
-            return $_cache;
-        }
-
-        $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.person'), array_merge($options, ['q' => urlencode($text)]));
-        is_string($_json) && $_result = json_decode($_json, true);
-        $_result['source'] = MediaDataSources::IMDB;
-
-        try {
-            MediaQuery::create([
-                'user_id'            => 0,
-                'source_nbr'         => MediaDataSources::IMDB,
-                'query_text'         => $text,
-                'response_type_text' => 'title',
-                'response_text'      => $_result,
-                'response_date'      => Carbon::now(),
-            ]);
-        } catch (\Exception $_ex) {
-            $this->logError('Exception creating media query row: ' . $_ex->getMessage());
-        }
-
-        return new PeopleResponse($_result);
+        return $this->doSearch($text, array_get($this->config, 'endpoints.' . static::PERSON_ENDPOINT_NAME), $options);
     }
 
     /**
@@ -90,13 +84,33 @@ class ImdbService extends BaseService implements SearchesMediaApis
      *
      * @return ApiResponseLike
      */
-    public function searchTitle($text, $options = array())
+    public function searchTitle($text, $options = [])
     {
-        $_result = $this->httpGet(array_get($this->config, 'endpoints.title'), array_merge($options, ['q' => urlencode($text)]));
-        is_string($_result) && $_result = json_decode($_result, true);
-        $_result['source'] = MediaDataSources::IMDB;
+        return $this->doSearch($text, array_get($this->config, 'endpoints.') . static::TITLE_ENDPOINT_NAME, $options);
+    }
 
-        return new TitleResponse($_result);
+    /**
+     * @param string $endpoint
+     * @param string $query
+     * @param array  $options
+     *
+     * @return bool|PeopleResponse|TitleResponse
+     */
+    protected function doSearch($query, $endpoint, $options = [])
+    {
+        if (false !== ($_cache = $this->checkQueryCache($query))) {
+            return $_cache;
+        }
+
+        $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.' . $endpoint, array_merge($options, ['q' => urlencode($query)])));
+        is_string($_json) && $_result = json_decode($_json, true);
+
+        $_result['source'] = MediaDataSources::IMDB;
+        $_result['type'] = $endpoint;
+
+        $this->storeQuery($query, $_result);
+
+        return ResponseFactory::make($_result);
     }
 
     protected function addPerson($person)
@@ -105,14 +119,56 @@ class ImdbService extends BaseService implements SearchesMediaApis
 
     /**
      * @param string $query
+     * @param        null  int|$source
      *
-     * @return \ChaoticWave\SilentMovie\Responses\PeopleResponse
+     * @return bool|\ChaoticWave\SilentMovie\Responses\PeopleResponse
      */
-    protected function checkQueryCache($query)
+    protected function checkQueryCache($query, $source = MediaDataSources::IMDB)
     {
         $_cache = MediaQuery::whereRaw('user_id = :user_id AND source_nbr = :source_nbr AND query_text = :query_text',
-            [':user_id' => 0, ':source_nbr' => MediaDataSources::IMDB, 'query_text' => $query])->first();
+            [':user_id' => 0, ':source_nbr' => $source, 'query_text' => $query])->first();
 
         return $_cache ? new PeopleResponse($_cache->response_text) : false;
+    }
+
+    /**
+     * @param string      $text
+     * @param array|null  $result
+     * @param string|null $type
+     * @param int|null    $source
+     *
+     * @return MediaQuery
+     */
+    protected function storeQuery($text, $result = null, $type = null, $source = MediaDataSources::IMDB)
+    {
+        if (empty($result['source'])) {
+            $result['source'] = $source ?: MediaDataSources::IMDB;
+        }
+
+        if (empty($result['type'])) {
+            $result['type'] = $type ?: 'title';
+        }
+
+        try {
+            /** @var MediaQuery $_model */
+            $_model = MediaQuery::create([
+                'user_id'            => 0,
+                'source_nbr'         => $result['source'],
+                'query_text'         => $text,
+                'response_type_text' => $result['type'],
+                'response_text'      => $result,
+                'response_date'      => Carbon::now(),
+            ]);
+
+            if ($_model && null !== ($_doc = DocumentFactory::make($result))) {
+                //Elastic::index($_doc);
+            }
+
+            return $_model;
+        } catch (\Exception $_ex) {
+            $this->logError('Exception creating media query row: ' . $_ex->getMessage());
+        }
+
+        return null;
     }
 }

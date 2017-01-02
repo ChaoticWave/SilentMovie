@@ -46,6 +46,7 @@ return [
         ChaoticWave\SilentMovie\Providers\AuthServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\EventServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\RouteServiceProvider::class,
+        ChaoticWave\SilentMovie\Providers\ElasticServiceProvider::class,
         ChaoticWave\SilentMovie\Providers\ImdbServiceProvider::class,
         // ChaoticWave\SilentMovie\Providers\OmdbServiceProvider::class,
         //******************************************************************************
