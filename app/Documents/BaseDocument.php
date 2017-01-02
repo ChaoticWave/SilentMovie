@@ -41,7 +41,7 @@ abstract class BaseDocument extends Collection
         }
 
         //  Boot the document
-        $this->boot($items, $parent);
+        $this->boot($items, array_pull($items, 'parent'));
 
         //  Load the rest into the collection
         parent::__construct($items);
@@ -50,21 +50,21 @@ abstract class BaseDocument extends Collection
     /**
      * A chance to massage the items before the go in the collection
      *
-     * @param string              $index
      * @param array               $items
      * @param DocumentLike[]|null $parent
      *
      * @return array
      */
-    protected function boot($index, &$items = [], $parent = null)
+    protected function boot(&$items = [], $parent = null)
     {
-        $this->index = $index;
         $this->parent = $parent;
 
-        foreach ($items as $_key => $_value) {
-            if ($_value !== '0000-00-00' && $_value !== '00/00/00') {
-                if ('date' === strtolower(substr($_key, -4))) {
-                    $items[$_key] = Carbon::parse($_value)->toIso8601String();
+        if (!empty($items)) {
+            foreach ($items as $_key => $_value) {
+                if ($_value !== '0000-00-00' && $_value !== '00/00/00') {
+                    if ('date' === strtolower(substr($_key, -4))) {
+                        $items[$_key] = Carbon::parse($_value)->toIso8601String();
+                    }
                 }
             }
         }
@@ -85,7 +85,10 @@ abstract class BaseDocument extends Collection
     public function toParamsArray($body = true, $refresh = true, $upsert = false, $merge = null)
     {
         //  Make sure we are in UTF8
-        $_data = array_map('utf8_encode', $this->toArray());
+        $_data = array_map(function($value) {
+            return is_scalar($value) ? utf8_encode($value) : $value;
+        },
+            $this->toArray());
 
         $_body = $upsert ? [
             'doc'           => $_data,

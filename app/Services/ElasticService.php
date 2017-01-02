@@ -46,7 +46,7 @@ class ElasticService extends BaseService
     {
         parent::__construct($app);
 
-        $this->strictSearch = config('elastic.strict-search', false);
+        $this->strictSearch = config('media.elastic.strict-search', false);
     }
 
     /**
@@ -445,7 +445,7 @@ class ElasticService extends BaseService
     protected static function getClient($reload = false, $config = [])
     {
         if (empty($config)) {
-            if (null !== ($_hosts = config('elastic.server.hosts'))) {
+            if (null !== ($_hosts = config('media.elastic.hosts'))) {
                 $config = ['hosts' => $_hosts];
             }
         }

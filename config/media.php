@@ -7,8 +7,8 @@ return [
         'imdb' => [
             'service'   => 'imdb',
             'endpoints' => [
-                'person' => 'http://www.imdb.com/xml/find?json=1&s=all&nm=on',
-                'title'  => 'http://www.imdb.com/xml/find?json=1&s=all&tt=on',
+                'person' => 'http://www.imdb.com/xml/find?json=1&nm=on',
+                'title'  => 'http://www.imdb.com/xml/find?json=1&tt=on',
             ],
         ],
         'omdb' => [
@@ -19,7 +19,10 @@ return [
             ],
         ],
     ],
+    /** Elasticsearch configuration */
     'elastic' => [
-        'index' => 'sm_media',
+        'hosts'         => ['http://elastic:changeme@localhost:9200',],
+        'index'         => 'sm_media',
+        'strict-search' => false,
     ],
 ];

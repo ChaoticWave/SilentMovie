@@ -18,9 +18,12 @@ class ImdbController extends Controller
     {
         $_result = ImdbApi::searchPeople($_query = $request->get('search-person'));
 
-        $_exact = [];
-        foreach (array_get($_mapped = $_result->mappedArray(), 'exact', []) as $_entity) {
-            $_exact[] = $_entity['name'] . ' (' . $_entity['id'] . ')';
+        $_exact = $_mapped = null;
+
+        if ($_result) {
+            foreach (array_get($_mapped = $_result->mappedArray(), 'exact', []) as $_entity) {
+                $_exact[] = $_entity['name'] . ' (' . $_entity['id'] . ')';
+            }
         }
 
         return view('search',

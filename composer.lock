@@ -182,12 +182,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ClassPreloader/ClassPreloader.git",
-                "reference": "854f3d039dcb7aebbcfa5dd74d723dfd91778010"
+                "reference": "0b3ab84b47045e733ae411a4c20df2c980e247b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/854f3d039dcb7aebbcfa5dd74d723dfd91778010",
-                "reference": "854f3d039dcb7aebbcfa5dd74d723dfd91778010",
+                "url": "https://api.github.com/repos/ClassPreloader/ClassPreloader/zipball/0b3ab84b47045e733ae411a4c20df2c980e247b4",
+                "reference": "0b3ab84b47045e733ae411a4c20df2c980e247b4",
                 "shasum": ""
             },
             "require": {
@@ -228,7 +228,7 @@
                 "class",
                 "preload"
             ],
-            "time": "2016-12-28 16:35:05"
+            "time": "2017-01-01 12:52:03"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -392,12 +392,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "da4576d689050d1003a29df8cfdb9681355aa036"
+                "reference": "925a5cadb005bef14e0c806fc19bf902e4f80f65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/da4576d689050d1003a29df8cfdb9681355aa036",
-                "reference": "da4576d689050d1003a29df8cfdb9681355aa036",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/925a5cadb005bef14e0c806fc19bf902e4f80f65",
+                "reference": "925a5cadb005bef14e0c806fc19bf902e4f80f65",
                 "shasum": ""
             },
             "require": {
@@ -449,7 +449,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2016-12-26 11:19:21"
+            "time": "2017-01-02 10:18:58"
         },
         {
             "name": "graham-campbell/flysystem",
@@ -457,12 +457,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GrahamCampbell/Laravel-Flysystem.git",
-                "reference": "2ce1b530a4b168e19a9e9d67eec8aa3b4dbbca58"
+                "reference": "91825d146a1301260e7d856ec54a12aeb7976065"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Flysystem/zipball/2ce1b530a4b168e19a9e9d67eec8aa3b4dbbca58",
-                "reference": "2ce1b530a4b168e19a9e9d67eec8aa3b4dbbca58",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Flysystem/zipball/91825d146a1301260e7d856ec54a12aeb7976065",
+                "reference": "91825d146a1301260e7d856ec54a12aeb7976065",
                 "shasum": ""
             },
             "require": {
@@ -506,7 +506,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.5-dev"
+                    "dev-master": "3.6-dev"
                 }
             },
             "autoload": {
@@ -538,7 +538,7 @@
                 "laravel",
                 "s3"
             ],
-            "time": "2016-12-28 16:21:02"
+            "time": "2017-01-01 13:14:12"
         },
         {
             "name": "graham-campbell/manager",
@@ -546,12 +546,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/GrahamCampbell/Laravel-Manager.git",
-                "reference": "acda76488102cd9306b839ab99aee3620f297444"
+                "reference": "e6ab47a8971da6fd18bc7ced546f0d24cb7ebe3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Manager/zipball/acda76488102cd9306b839ab99aee3620f297444",
-                "reference": "acda76488102cd9306b839ab99aee3620f297444",
+                "url": "https://api.github.com/repos/GrahamCampbell/Laravel-Manager/zipball/e6ab47a8971da6fd18bc7ced546f0d24cb7ebe3a",
+                "reference": "e6ab47a8971da6fd18bc7ced546f0d24cb7ebe3a",
                 "shasum": ""
             },
             "require": {
@@ -567,7 +567,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.4-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -597,7 +597,7 @@
                 "laravel",
                 "manager"
             ],
-            "time": "2016-12-28 16:21:46"
+            "time": "2017-01-01 13:08:54"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -851,12 +851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "26059fc78f57e8453362e8f6fd73dd47cfa9b523"
+                "reference": "5dd17b6c9ff3213bdb3871e039ba58ca3ffc56c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/26059fc78f57e8453362e8f6fd73dd47cfa9b523",
-                "reference": "26059fc78f57e8453362e8f6fd73dd47cfa9b523",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/5dd17b6c9ff3213bdb3871e039ba58ca3ffc56c3",
+                "reference": "5dd17b6c9ff3213bdb3871e039ba58ca3ffc56c3",
                 "shasum": ""
             },
             "require": {
@@ -971,7 +971,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-12-29 17:02:48"
+            "time": "2017-01-01 19:06:39"
         },
         {
             "name": "league/flysystem",
@@ -1744,12 +1744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "8b8ad9b115c4c3eb4527632cf2431c71186a7b81"
+                "reference": "372b9e35345ca489d6ebefec4972b51fb325b2d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/8b8ad9b115c4c3eb4527632cf2431c71186a7b81",
-                "reference": "8b8ad9b115c4c3eb4527632cf2431c71186a7b81",
+                "url": "https://api.github.com/repos/symfony/console/zipball/372b9e35345ca489d6ebefec4972b51fb325b2d3",
+                "reference": "372b9e35345ca489d6ebefec4972b51fb325b2d3",
                 "shasum": ""
             },
             "require": {
@@ -1797,7 +1797,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-29 21:43:11"
+            "time": "2017-01-02 15:09:29"
         },
         {
             "name": "symfony/debug",
@@ -1805,12 +1805,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "789740702bbc55d8abec979d48b3b65f6074bb21"
+                "reference": "7516ea0b3fdeeb7b053716bd44f52222044a08dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/789740702bbc55d8abec979d48b3b65f6074bb21",
-                "reference": "789740702bbc55d8abec979d48b3b65f6074bb21",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/7516ea0b3fdeeb7b053716bd44f52222044a08dd",
+                "reference": "7516ea0b3fdeeb7b053716bd44f52222044a08dd",
                 "shasum": ""
             },
             "require": {
@@ -1854,7 +1854,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-27 10:43:25"
+            "time": "2017-01-02 14:50:07"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -2504,12 +2504,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
-                "reference": "8911044b5c836f21d0bf050d6d8692e3e7ee79f8"
+                "reference": "8620144d1d5b9ff973ec761d613e136ce37033a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/8911044b5c836f21d0bf050d6d8692e3e7ee79f8",
-                "reference": "8911044b5c836f21d0bf050d6d8692e3e7ee79f8",
+                "url": "https://api.github.com/repos/symfony/stopwatch/zipball/8620144d1d5b9ff973ec761d613e136ce37033a3",
+                "reference": "8620144d1d5b9ff973ec761d613e136ce37033a3",
                 "shasum": ""
             },
             "require": {
@@ -2545,7 +2545,7 @@
             ],
             "description": "Symfony Stopwatch Component",
             "homepage": "https://symfony.com",
-            "time": "2016-12-27 10:45:09"
+            "time": "2017-01-02 14:58:37"
         },
         {
             "name": "symfony/translation",
@@ -2732,12 +2732,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "a0adee8297c90980c3d3ffe25e5a6c6f52fa73fa"
+                "reference": "1afec9d2743b96750e282e803bdfa434f7b6e625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/a0adee8297c90980c3d3ffe25e5a6c6f52fa73fa",
-                "reference": "a0adee8297c90980c3d3ffe25e5a6c6f52fa73fa",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/1afec9d2743b96750e282e803bdfa434f7b6e625",
+                "reference": "1afec9d2743b96750e282e803bdfa434f7b6e625",
                 "shasum": ""
             },
             "require": {
@@ -2792,7 +2792,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2016-11-05 13:23:40"
+            "time": "2016-12-30T16:00:35+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -3850,12 +3850,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "86c7f0affb9e2c17b1fe53a82cf0aa2ed5a31990"
+                "reference": "511c9a135ecd61b1719c92e239532f294c99e15a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/86c7f0affb9e2c17b1fe53a82cf0aa2ed5a31990",
-                "reference": "86c7f0affb9e2c17b1fe53a82cf0aa2ed5a31990",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/511c9a135ecd61b1719c92e239532f294c99e15a",
+                "reference": "511c9a135ecd61b1719c92e239532f294c99e15a",
                 "shasum": ""
             },
             "require": {
@@ -3924,11 +3924,11 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-12-29 06:52:24"
+            "time": "2017-01-02T15:53:34+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.4.3",
+            "version": "3.4.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",

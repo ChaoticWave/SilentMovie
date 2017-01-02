@@ -23,6 +23,8 @@ class CreateMediaQueryTable extends Migration
                 $table->string('query_text', 255);
                 /** @noinspection PhpUndefinedMethodInspection */
                 $table->smallInteger('source_nbr')->default(0);
+                /** @noinspection PhpUndefinedMethodInspection */
+                $table->string('index_id_text', 128)->nullable();
                 $table->string('response_type_text', 64);
                 /** @noinspection PhpUndefinedMethodInspection */
                 $table->text('response_text')->nullable();
@@ -30,7 +32,7 @@ class CreateMediaQueryTable extends Migration
                 $table->timestamps();
 
                 //  A unique index
-                $table->unique(['user_id', 'source_nbr'], 'ixu_source_source_id');
+                $table->unique(['user_id', 'source_nbr', 'query_text'], 'ixu_user_source_query');
             });
     }
 

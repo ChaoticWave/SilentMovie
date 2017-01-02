@@ -5,9 +5,11 @@ use ChaoticWave\BlueVelvet\Services\BaseService;
 use ChaoticWave\BlueVelvet\Traits\Curly;
 use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
 use ChaoticWave\SilentMovie\Contracts\SearchesMediaApis;
+use ChaoticWave\SilentMovie\Database\Models\MediaEntity;
 use ChaoticWave\SilentMovie\Database\Models\MediaQuery;
-use ChaoticWave\SilentMovie\Documents\DocumentFactory;
+use ChaoticWave\SilentMovie\Documents\ResponseDocument;
 use ChaoticWave\SilentMovie\Enums\MediaDataSources;
+use ChaoticWave\SilentMovie\Facades\Elastic;
 use ChaoticWave\SilentMovie\Responses\PeopleResponse;
 use ChaoticWave\SilentMovie\Responses\ResponseFactory;
 use ChaoticWave\SilentMovie\Responses\TitleResponse;
@@ -73,7 +75,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchPeople($text, $options = [])
     {
-        return $this->doSearch($text, array_get($this->config, 'endpoints.' . static::PERSON_ENDPOINT_NAME), $options);
+        return $this->doSearch($text, static::PERSON_ENDPOINT_NAME, $options);
     }
 
     /**
@@ -86,7 +88,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchTitle($text, $options = [])
     {
-        return $this->doSearch($text, array_get($this->config, 'endpoints.') . static::TITLE_ENDPOINT_NAME, $options);
+        return $this->doSearch($text, static::TITLE_ENDPOINT_NAME, $options);
     }
 
     /**
@@ -102,7 +104,15 @@ class ImdbService extends BaseService implements SearchesMediaApis
             return $_cache;
         }
 
-        $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.' . $endpoint, array_merge($options, ['q' => urlencode($query)])));
+        $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.' . $endpoint),
+            array_merge($options, ['q' => urlencode($query), '_' => time()]),
+            [
+                CURLOPT_HTTPHEADER => [
+                    'content-type' => 'application/json',
+                    'user-agent'   => \Request::server('http-user-agent'),
+                ],
+            ]);
+
         is_string($_json) && $_result = json_decode($_json, true);
 
         $_result['source'] = MediaDataSources::IMDB;
@@ -113,8 +123,27 @@ class ImdbService extends BaseService implements SearchesMediaApis
         return ResponseFactory::make($_result);
     }
 
-    protected function addPerson($person)
+    /**
+     * @param array            $response
+     * @param MediaEntity|null $model
+     *
+     * @return bool
+     */
+    protected function indexResponse($response, $model = null)
     {
+        $document = new ResponseDocument($response);
+
+        if (false === ($_result = Elastic::index($document))) {
+            return false;
+        }
+
+        $this->logDebug('Response indexed', ['result' => $_result]);
+
+        if (null !== $model && null !== ($_id = array_get($_result, '_id'))) {
+            $model->update(['index_id_text' => $_id]);
+        }
+
+        return true;
     }
 
     /**
@@ -149,6 +178,8 @@ class ImdbService extends BaseService implements SearchesMediaApis
             $result['type'] = $type ?: 'title';
         }
 
+        $_model = null;
+
         try {
             /** @var MediaQuery $_model */
             $_model = MediaQuery::create([
@@ -159,16 +190,12 @@ class ImdbService extends BaseService implements SearchesMediaApis
                 'response_text'      => $result,
                 'response_date'      => Carbon::now(),
             ]);
-
-            if ($_model && null !== ($_doc = DocumentFactory::make($result))) {
-                //Elastic::index($_doc);
-            }
-
-            return $_model;
         } catch (\Exception $_ex) {
             $this->logError('Exception creating media query row: ' . $_ex->getMessage());
         }
 
-        return null;
+        $this->indexResponse($result, $_model);
+
+        return $_model;
     }
 }
