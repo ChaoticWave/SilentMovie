@@ -21,8 +21,12 @@ class ImdbController extends Controller
         $_exact = $_mapped = null;
 
         if ($_result) {
-            foreach (array_get($_mapped = $_result->mappedArray(), 'exact', []) as $_entity) {
-                $_exact[] = $_entity['name'] . ' (' . $_entity['id'] . ')';
+            $_mapped = $_result->mappedArray();
+
+            if (!empty($_entities = array_get($_mapped, 'exact'))) {
+                foreach ($_entities as $_entity) {
+                    $_exact[] = $_entity['name'] . ' (' . $_entity['id'] . ')';
+                }
             }
         }
 
