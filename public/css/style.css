@@ -77,6 +77,15 @@ label {
 .simo-card-title {
 }
 
+.simo-link {
+    color:           inherit;
+    text-decoration: none;
+}
+
+.simo-link:hover {
+    text-decoration: underline;
+}
+
 .highlighted {
     background-color: rgba(255, 239, 52, 0.51);
 }

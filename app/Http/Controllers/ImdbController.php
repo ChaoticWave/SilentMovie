@@ -24,6 +24,7 @@ class ImdbController extends Controller
             foreach ($_mapped as $_type => $_entities) {
                 foreach ($_entities ?: [] as $_id => $_entity) {
                     $_mapped[$_type][$_id]['name'] = $this->highlight($_entity['name'], $_query);
+                    $_mapped[$_type][$_id]['link'] = 'http://www.imdb.com/name/' . $_id;
                 }
             }
         }
