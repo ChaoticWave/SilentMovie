@@ -1,33 +1,19 @@
-<div id="search-results-{{ $_type }}" class="panel panel-default">
-    <div class="panel-heading"><h3 class="panel-title">{{ $_type }} Matches</h3></div>
-    <div class="panel-body">
-        <div class="form-horizontal">
-            @foreach($_typeList as $_item)
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">ID</label>
-                    <div class="col-sm-3">
-                        <p class="form-control-static">{{ array_get($_item,'id') }}</p>
-                    </div>
+<div id="search-results-{{ $_type }}" class="panel panel-default simo-results-panel">
+    <div class="panel-heading" style="text-transform: capitalize"><h3>{{ $_type }} Matches</h3></div>
+    <ul class="list-group">
+        @foreach($_typeList as $_item)
+            <li class="list-group-item">
+                <div class="row">
+                    <div class="col-md-1 simo-icon"><i class="fa fa-fw fa-user-o"></i></div>
+                    <div class="col-md-3 simo-title">{!! array_get($_item, 'title') ?: array_get($_item, 'name') !!}</div>
+                    @if (!empty($_item['title']))
+                        <div class="col-md-3 simo-info">{!! $_item['title'] !!}</div>
+                        <div class="col-md-3 simo-info">{!! array_get($_item, 'description', '[no description]') !!}</div>
+                    @else
+                        <div class="col-md-6 simo-info">{!! array_get($_item, 'description', '[no description]') !!}</div>
+                    @endif
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Name</label>
-                    <div class="col-sm-3">
-                        <p class="form-control-static">{{ array_get($_item,'name') }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Description</label>
-                    <div class="col-sm-3">
-                        <p class="form-control-static">{{ array_get($_item,'description') }}</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">Title</label>
-                    <div class="col-sm-3">
-                        <p class="form-control-static">{{ array_get($_item,'title') }}</p>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
+            </li>
+        @endforeach
+    </ul>
 </div>

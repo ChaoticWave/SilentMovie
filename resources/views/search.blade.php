@@ -28,7 +28,7 @@
 @section('content')
     @if(!empty($search))
         <div id="search-results" class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 panel-list">
                 <h2>Search results for query: <strong>{{ $searchQuery }}</strong></h2>
 
                 @foreach($search as $_type => $_typeList)
@@ -38,7 +38,6 @@
                         <p>No <strong>{{ $_type }}</strong> matches</p>
                     @endif
                 @endforeach
-
             </div>
         </div>
     @endif

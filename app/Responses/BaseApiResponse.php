@@ -79,7 +79,8 @@ class BaseApiResponse implements ApiResponseLike
 
             if (!empty($_results)) {
                 foreach ($_results as $_index => $_entity) {
-                    $_array[$_map][] = $_entity instanceof Entity ? $_entity->toArray() : $_entity;
+                    $_id = $_entity instanceof Entity ? $_entity->getId() : null;
+                    $_array[$_map][$_id] = $_entity instanceof Entity ? $_entity->toArray() : $_entity;
                 }
             }
         }

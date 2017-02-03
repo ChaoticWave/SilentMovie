@@ -16,27 +16,44 @@ class ImdbController extends Controller
      */
     public function search(Request $request)
     {
-        $_result = ImdbApi::searchPeople($_query = $request->get('search-person'));
-
         $_exact = $_mapped = null;
 
-        if ($_result) {
+        if (!empty($_result = ImdbApi::searchPeople($_query = $request->get('search-person')))) {
             $_mapped = $_result->mappedArray();
 
-            if (!empty($_entities = array_get($_mapped, 'exact'))) {
-                foreach ($_entities as $_entity) {
-                    $_exact[] = $_entity['name'] . ' (' . $_entity['id'] . ')';
+            foreach ($_mapped as $_type => $_entities) {
+                foreach ($_entities ?: [] as $_id => $_entity) {
+                    $_mapped[$_type][$_id]['name'] = $this->highlight($_entity['name'], $_query);
                 }
             }
         }
 
         return view('search',
             [
-                'exact'        => $_exact,
                 'search'       => $_mapped,
                 'searchQuery'  => $_query,
                 'searchText'   => var_export($_result, true),
                 'totalResults' => data_get($_result, 'totalResults'),
             ]);
+    }
+
+    /**
+     * @param $haystack
+     * @param $needle
+     *
+     * @return string
+     */
+    protected function highlight($haystack, $needle)
+    {
+        $_start = stripos($haystack, $needle);
+
+        if (false !== $_start) {
+            $_len = strlen($needle);
+            $_end = $_start + $_len;
+
+            return substr($haystack, 0, $_start) . '<span class="highlighted">' . substr($haystack, $_start, $_len) . '</span>' . substr($haystack, $_end);
+        }
+
+        return $haystack;
     }
 }

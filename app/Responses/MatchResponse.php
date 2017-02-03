@@ -65,7 +65,8 @@ class MatchResponse extends BaseApiResponse
                 $_entities = null;
 
                 foreach ($_hits as $_index => $_hit) {
-                    $_entities[] = new Entity($_hit);
+                    $_entity = new Entity($_hit);
+                    $_entities[$_entity->getId()] = $_entity;
                 }
 
                 $this->{$_prop} = $_entities;

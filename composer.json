@@ -15,7 +15,7 @@
     "require":           {
         "php":                         ">=5.6.4",
         "chaoticwave/blue-velvet":     "1.0.*",
-        "laravel/framework":           "5.3.*",
+        "laravel/framework":           "5.4.*",
         "elasticsearch/elasticsearch": ">=2.0.0"
     },
     "require-dev":       {
