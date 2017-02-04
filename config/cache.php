@@ -2,22 +2,31 @@
 return [
     'default' => env('CACHE_DRIVER', 'file'),
     'stores'  => [
-        'apc'       => [
+        'apc'           => [
             'driver' => 'apc',
         ],
-        'array'     => [
+        'array'         => [
             'driver' => 'array',
         ],
-        'database'  => [
+        'database'      => [
             'driver'     => 'database',
             'table'      => 'cache',
             'connection' => null,
         ],
-        'file'      => [
+        'elasticsearch' => [
+            'driver'        => 'elasticsearch',
+            /** index name */
+            'index'         => 'bv_cache',
+            /** optional document type */
+            'type'          => null,
+            'hosts'         => ['http://localhost:9200'],
+            'strict-search' => false,
+        ],
+        'file'          => [
             'driver' => 'file',
             'path'   => storage_path('framework/cache'),
         ],
-        'memcached' => [
+        'memcached'     => [
             'driver'        => 'memcached',
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
             'sasl'          => [
