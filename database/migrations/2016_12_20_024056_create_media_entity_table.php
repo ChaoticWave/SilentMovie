@@ -28,7 +28,7 @@ class CreateMediaEntityTable extends Migration
                 $table->string('title_desc_text', 1024)->nullable();
                 $table->text('extra_text')->nullable();
                 $table->string('response_type_text', 64);
-
+                $table->timestamp('ingested_at')->nullable();
                 $table->timestamps();
 
                 //  A unique index

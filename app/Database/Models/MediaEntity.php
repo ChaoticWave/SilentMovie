@@ -1,7 +1,7 @@
 <?php namespace ChaoticWave\SilentMovie\Database\Models;
 
 use ChaoticWave\SilentMovie\Database\SilentMovieModel;
-use ChaoticWave\SilentMovie\Documents\Entity;
+use ChaoticWave\SilentMovie\Responses\Entity;
 use Illuminate\Database\QueryException;
 
 /**
@@ -37,10 +37,10 @@ class MediaEntity extends SilentMovieModel
     //******************************************************************************
 
     /**
-     * @param \ChaoticWave\SilentMovie\Documents\Entity $entity
+     * @param \ChaoticWave\SilentMovie\Responses\Entity $entity
      * @param string                                    $responseType
      *
-     * @return static
+     * @return MediaEntity|\Illuminate\Database\Eloquent\Model
      */
     public static function createFromEntity(Entity $entity, $responseType)
     {
@@ -64,22 +64,22 @@ class MediaEntity extends SilentMovieModel
             }
         }
 
-        return static::create($_data);
+        return static::query()->create($_data);
     }
 
     /**
-     * @param \ChaoticWave\SilentMovie\Documents\Entity $entity
+     * @param \ChaoticWave\SilentMovie\Responses\Entity $entity
      * @param string                                    $responseType
      *
-     * @return static
+     * @return MediaEntity|\Illuminate\Database\Eloquent\Model
      * @throws \Exception
      */
     public static function upsertFromEntity(Entity $entity, $responseType)
     {
         try {
-            /** @var static $_model */
+            /** @var MediaEntity $_model */
             if (null === ($_model = static::where('source_nbr', $entity->getSource())->where('source_id_text', $entity->getId())->first())) {
-                return static::create(static::mapEntity($entity, $responseType));
+                return static::query()->create(static::mapEntity($entity, $responseType));
             }
 
             $_model->update(static::mapEntity($entity, $responseType));
@@ -92,7 +92,7 @@ class MediaEntity extends SilentMovieModel
     }
 
     /**
-     * @param \ChaoticWave\SilentMovie\Documents\Entity $entity
+     * @param \ChaoticWave\SilentMovie\Responses\Entity $entity
      * @param string                                    $responseType
      *
      * @return array

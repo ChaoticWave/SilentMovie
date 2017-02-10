@@ -101,7 +101,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
     protected function doSearch($query, $endpoint, $options = [])
     {
         if (false !== ($_cache = $this->checkQueryCache($query))) {
-            return $_cache;
+            return ResponseFactory::make($_cache);
         }
 
         $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.' . $endpoint),
@@ -115,12 +115,68 @@ class ImdbService extends BaseService implements SearchesMediaApis
 
         is_string($_json) && $_result = json_decode($_json, true);
 
-        $_result['source'] = MediaDataSources::IMDB;
-        $_result['type'] = $endpoint;
+        $_result = array_merge($_result,
+            [
+                'type'    => $endpoint,
+                'details' => [
+                    'response_time' => time(),
+                    'media_source'  => MediaDataSources::IMDB,
+                    'query_text'    => $query,
+                    'endpoint'      => $endpoint,
+                ],
+            ]);
 
-        $this->storeQuery($query, $_result);
+        $this->storeQuery($query, $_result, $endpoint, MediaDataSources::IMDB);
 
         return ResponseFactory::make($_result);
+    }
+
+    /**
+     * @param string $query
+     * @param        null  int|$source
+     *
+     * @return array|boolean
+     */
+    protected function checkQueryCache($query, $source = MediaDataSources::IMDB)
+    {
+        $_cache = MediaQuery::whereRaw('user_id = :user_id AND source_nbr = :source_nbr AND query_text = :query_text',
+            [':user_id' => 0, ':source_nbr' => $source, 'query_text' => $query])->first();
+
+        return empty($_cache) ? false : $_cache->response_text;
+    }
+
+    /**
+     * @param string      $text
+     * @param array|null  $result
+     * @param string|null $type
+     * @param int|null    $source
+     *
+     * @return MediaQuery
+     */
+    protected function storeQuery($text, $result = null, $type = null, $source = MediaDataSources::IMDB)
+    {
+        $result['media_source'] = $source = array_get($result, 'media_source', $source ?: MediaDataSources::IMDB);
+        $result['type'] = $type = array_get($result, 'type', $type ?: static::PERSON_ENDPOINT_NAME);
+
+        $_model = null;
+
+        try {
+            /** @var MediaQuery $_model */
+            $_model = MediaQuery::query()->create([
+                'user_id'            => 0,
+                'source_nbr'         => $source,
+                'query_text'         => $text,
+                'response_type_text' => $type,
+                'response_text'      => $result,
+                'response_date'      => Carbon::now(),
+            ]);
+        } catch (\Exception $_ex) {
+            $this->logError('Exception creating media query row: ' . $_ex->getMessage());
+        }
+
+        $this->indexResponse($result, $_model);
+
+        return $_model;
     }
 
     /**
@@ -144,58 +200,5 @@ class ImdbService extends BaseService implements SearchesMediaApis
         }
 
         return true;
-    }
-
-    /**
-     * @param string $query
-     * @param        null  int|$source
-     *
-     * @return bool|\ChaoticWave\SilentMovie\Responses\PeopleResponse
-     */
-    protected function checkQueryCache($query, $source = MediaDataSources::IMDB)
-    {
-        $_cache = MediaQuery::whereRaw('user_id = :user_id AND source_nbr = :source_nbr AND query_text = :query_text',
-            [':user_id' => 0, ':source_nbr' => $source, 'query_text' => $query])->first();
-
-        return $_cache ? new PeopleResponse($_cache->response_text) : false;
-    }
-
-    /**
-     * @param string      $text
-     * @param array|null  $result
-     * @param string|null $type
-     * @param int|null    $source
-     *
-     * @return MediaQuery
-     */
-    protected function storeQuery($text, $result = null, $type = null, $source = MediaDataSources::IMDB)
-    {
-        if (empty($result['source'])) {
-            $result['source'] = $source ?: MediaDataSources::IMDB;
-        }
-
-        if (empty($result['type'])) {
-            $result['type'] = $type ?: 'title';
-        }
-
-        $_model = null;
-
-        try {
-            /** @var MediaQuery $_model */
-            $_model = MediaQuery::create([
-                'user_id'            => 0,
-                'source_nbr'         => $result['source'],
-                'query_text'         => $text,
-                'response_type_text' => $result['type'],
-                'response_text'      => $result,
-                'response_date'      => Carbon::now(),
-            ]);
-        } catch (\Exception $_ex) {
-            $this->logError('Exception creating media query row: ' . $_ex->getMessage());
-        }
-
-        $this->indexResponse($result, $_model);
-
-        return $_model;
     }
 }

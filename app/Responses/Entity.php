@@ -1,4 +1,4 @@
-<?php namespace ChaoticWave\SilentMovie\Documents;
+<?php namespace ChaoticWave\SilentMovie\Responses;
 
 use ChaoticWave\SilentMovie\Enums\MediaDataSources;
 use Illuminate\Contracts\Support\Arrayable;
@@ -47,6 +47,10 @@ class Entity implements Arrayable, Jsonable
      * @see MediaDataSources
      */
     protected $source;
+    /**
+     * @var string
+     */
+    protected $ingested;
 
     //******************************************************************************
     //* Methods
@@ -68,6 +72,7 @@ class Entity implements Arrayable, Jsonable
         $this->title = array_pull($data, 'title');
         $this->titleDescription = array_pull($data, 'title_description');
         $this->description = array_pull($data, 'description');
+        $this->ingested = array_pull($data, 'ingested_at');
 
         $this->extra = $data;
     }
@@ -137,6 +142,14 @@ class Entity implements Arrayable, Jsonable
     }
 
     /**
+     * @return string
+     */
+    public function getIngested()
+    {
+        return $this->ingested;
+    }
+
+    /**
      * @return array
      */
     public function toArray()
@@ -150,6 +163,7 @@ class Entity implements Arrayable, Jsonable
             'episode_title'     => $this->episodeTitle,
             'extra'             => $this->extra,
             'source'            => $this->source,
+            'ingested_at'       => $this->ingested,
         ];
     }
 

@@ -1,7 +1,6 @@
 <?php namespace ChaoticWave\SilentMovie\Responses;
 
 use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
-use ChaoticWave\SilentMovie\Documents\Entity;
 use ChaoticWave\SilentMovie\Enums\MediaDataSources;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;

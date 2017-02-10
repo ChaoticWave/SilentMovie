@@ -4,7 +4,7 @@
         @foreach($_typeList as $_item)
             <li class="list-group-item">
                 <div class="row">
-                    <div class="col-md-1 simo-icon"><i class="fa fa-fw fa-user-o"></i></div>
+                    <div class="col-md-1 simo-icon"><i class="fa fa-fw {{ $_item['icon'] }}"></i></div>
                     <div class="col-md-3 simo-title"><a href="{{ $_item['link'] }}"
                                                         target="_blank"
                                                         class="simo-link">{!! array_get($_item, 'title') ?: array_get($_item, 'name') !!}</a></div>

@@ -11,7 +11,7 @@ class ResponseFactory
      */
     protected static $classMap = [
         'title'  => TitleResponse::class,
-        'people' => PeopleResponse::class,
+        'person' => PeopleResponse::class,
     ];
 
     //******************************************************************************
@@ -23,18 +23,18 @@ class ResponseFactory
      *
      * @param array $response
      *
-     * @return PeopleResponse|TitleResponse
+     * @return PeopleResponse|TitleResponse|array
      */
     public static function make(array $response = [])
     {
-        //  Try the map
-        if (null !== ($_type = array_get($response, 'type'))) {
+        //  Try the mapping if it's a search response
+        if (null !== ($_type = array_get($response, 'type', array_get($response, 'details.endpoint')))) {
             if (null !== ($_class = array_get(static::$classMap, $_type))) {
                 return new $_class($response);
             }
         }
 
-        //  Try the id
+        //  Try the id for individual entity responses
         switch (substr(array_get($response, 'id'), 0, 2)) {
             case 'nm':
                 return new PeopleResponse($response);

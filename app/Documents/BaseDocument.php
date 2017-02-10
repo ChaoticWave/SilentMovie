@@ -1,6 +1,7 @@
 <?php namespace ChaoticWave\SilentMovie\Documents;
 
 use Carbon\Carbon;
+use ChaoticWave\BlueVelvet\Utility\Encoding;
 use ChaoticWave\SilentMovie\Contracts\DocumentLike;
 use Illuminate\Support\Collection;
 
@@ -70,6 +71,43 @@ abstract class BaseDocument extends Collection
         }
 
         return $items;
+    }
+
+    /**
+     * Returns the contents encoded
+     *
+     * @param string     $to      Target character encoding
+     * @param array|null $objects Array of keys into $this[] that are not scalar
+     *
+     * @return array|string
+     */
+    public function toEncodedArray($to = 'UTF-8', $objects = null)
+    {
+        foreach ($_data = Encoding::encode($this->toArray(), $to) as $_key => $_value) {
+            if (!empty($_value) && is_string($_value) && in_array($_key, $objects)) {
+                try {
+                    //  Try PHP serialize
+                    if (false !== ($_raw = unserialize($_value))) {
+                        $_data[$_key] = $_raw;
+                        continue;
+                    }
+                } catch (\Exception $_ex) {
+                    //  Ignored
+                }
+
+                try {
+                    //  Try JSON
+                    if (false !== ($_raw = json_decode($_value, true)) && JSON_ERROR_NONE === json_last_error()) {
+                        $_data[$_key] = $_raw;
+                        continue;
+                    }
+                } catch (\Exception $_ex) {
+                    //  Ignored
+                }
+            }
+        }
+
+        return $_data;
     }
 
     /**

@@ -14,17 +14,47 @@ class ImdbController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function search(Request $request)
+    public function peopleSearch(Request $request)
     {
-        $_exact = $_mapped = null;
+        $_mapped = null;
 
         if (!empty($_result = ImdbApi::searchPeople($_query = $request->get('search-person')))) {
             $_mapped = $_result->mappedArray();
 
+            foreach ($_mapped as $_type => &$_entities) {
+                foreach ($_entities ?: [] as $_id => &$_entity) {
+                    $_entity['name'] = $this->highlight($_entity['name'], $_query);;
+                    $_entity['link'] = 'http://www.imdb.com/name/' . $_id;
+                    $_entity['icon'] = empty($_entity['ingested_at']) ? 'fa-user-o' : 'fa-user-circle';
+                }
+            }
+        }
+
+        return view('search',
+            [
+                'search'       => $_mapped,
+                'searchQuery'  => $_query,
+                'searchText'   => var_export($_result, true),
+                'totalResults' => data_get($_result, 'totalResults'),
+            ]);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function titleSearch(Request $request)
+    {
+        $_mapped = null;
+
+        if (!empty($_result = ImdbApi::searchTitle($_query = $request->get('search-title')))) {
+            $_mapped = $_result->mappedArray();
+
             foreach ($_mapped as $_type => $_entities) {
                 foreach ($_entities ?: [] as $_id => $_entity) {
-                    $_mapped[$_type][$_id]['name'] = $this->highlight($_entity['name'], $_query);
-                    $_mapped[$_type][$_id]['link'] = 'http://www.imdb.com/name/' . $_id;
+                    $_mapped[$_type][$_id]['title'] = $this->highlight($_entity['title'], $_query);
+                    $_mapped[$_type][$_id]['link'] = 'http://www.imdb.com/title/' . $_id;
                 }
             }
         }

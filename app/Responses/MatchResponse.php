@@ -1,6 +1,5 @@
 <?php namespace ChaoticWave\SilentMovie\Responses;
 
-use ChaoticWave\SilentMovie\Documents\Entity;
 
 class MatchResponse extends BaseApiResponse
 {
@@ -76,7 +75,7 @@ class MatchResponse extends BaseApiResponse
     }
 
     /**
-     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     * @return \ChaoticWave\SilentMovie\Responses\Entity[]
      */
     public function getExact()
     {
@@ -84,7 +83,7 @@ class MatchResponse extends BaseApiResponse
     }
 
     /**
-     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     * @return \ChaoticWave\SilentMovie\Responses\Entity[]
      */
     public function getPopular()
     {
@@ -92,7 +91,7 @@ class MatchResponse extends BaseApiResponse
     }
 
     /**
-     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     * @return \ChaoticWave\SilentMovie\Responses\Entity[]
      */
     public function getSubstring()
     {
@@ -100,7 +99,7 @@ class MatchResponse extends BaseApiResponse
     }
 
     /**
-     * @return \ChaoticWave\SilentMovie\Documents\Entity[]
+     * @return \ChaoticWave\SilentMovie\Responses\Entity[]
      */
     public function getApprox()
     {
