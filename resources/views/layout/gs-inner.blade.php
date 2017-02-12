@@ -106,5 +106,6 @@
 
 <!-- Theme JavaScript -->
 <script src="vendor/grayscale/js/grayscale.min.js"></script>
+<script src="/js/search.js"></script>
 </body>
 </html>

@@ -25,7 +25,7 @@ class ImdbController extends Controller
                 foreach ($_entities ?: [] as $_id => &$_entity) {
                     $_entity['name'] = $this->highlight($_entity['name'], $_query);;
                     $_entity['link'] = 'http://www.imdb.com/name/' . $_id;
-                    $_entity['icon'] = empty($_entity['ingested_at']) ? 'fa-user-o' : 'fa-user-circle';
+                    $_entity['icon'] = empty($_entity['ingested_at']) ? 'fa-user-o ingest' : 'fa-user-circle ingested';
                 }
             }
         }
