@@ -19,10 +19,6 @@ abstract class BaseDocument extends Collection
      * @var string
      */
     protected $id;
-    /**
-     * @var DocumentLike[] The parent document(s), if any
-     */
-    protected $parent;
 
     //******************************************************************************
     //* Methods
@@ -42,7 +38,7 @@ abstract class BaseDocument extends Collection
         }
 
         //  Boot the document
-        $this->boot($items, array_pull($items, 'parent'));
+        $this->boot($items);
 
         //  Load the rest into the collection
         parent::__construct($items);
@@ -51,15 +47,12 @@ abstract class BaseDocument extends Collection
     /**
      * A chance to massage the items before the go in the collection
      *
-     * @param array               $items
-     * @param DocumentLike[]|null $parent
+     * @param array $items
      *
      * @return array
      */
-    protected function boot(&$items = [], $parent = null)
+    protected function boot(&$items = [])
     {
-        $this->parent = $parent;
-
         if (!empty($items)) {
             foreach ($items as $_key => $_value) {
                 if ($_value !== '0000-00-00' && $_value !== '00/00/00') {
@@ -193,26 +186,6 @@ abstract class BaseDocument extends Collection
     public function setId($id)
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * @return \ChaoticWave\SilentMovie\Contracts\DocumentLike[]
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param \ChaoticWave\SilentMovie\Contracts\DocumentLike[] $parent
-     *
-     * @return BaseDocument
-     */
-    public function setParent($parent = [])
-    {
-        $this->parent = $parent;
 
         return $this;
     }

@@ -29,6 +29,10 @@ class ImdbService extends BaseService implements SearchesMediaApis
     /**
      * @var string
      */
+    const DEFAULT_USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36';
+    /**
+     * @var string
+     */
     const PERSON_ENDPOINT_NAME = 'person';
     /**
      * @var string
@@ -43,6 +47,10 @@ class ImdbService extends BaseService implements SearchesMediaApis
      * @var array
      */
     protected $config;
+    /**
+     * @var string
+     */
+    protected $apiKey;
 
     //******************************************************************************
     //* Methods
@@ -59,6 +67,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
         parent::__construct($app);
 
         $this->config = !empty($config) ? $config : config('media.apis.imdb');
+        $this->apiKey = config('media.apis.imdb.api-key');
     }
 
     //******************************************************************************
@@ -75,7 +84,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchPeople($text, $options = [])
     {
-        return $this->doSearch($text, static::PERSON_ENDPOINT_NAME, $options);
+        return $this->doGet($text, static::PERSON_ENDPOINT_NAME, $options);
     }
 
     /**
@@ -88,7 +97,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     public function searchTitle($text, $options = [])
     {
-        return $this->doSearch($text, static::TITLE_ENDPOINT_NAME, $options);
+        return $this->doGet($text, static::TITLE_ENDPOINT_NAME, $options);
     }
 
     /**
@@ -100,16 +109,60 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     protected function doSearch($query, $endpoint, $options = [])
     {
-        if (false !== ($_cache = $this->checkQueryCache($query))) {
+        if (false !== ($_cache = $this->checkQueryCache($query . $endpoint))) {
             return ResponseFactory::make($_cache);
         }
 
-        $_result = $_json = $this->httpGet(array_get($this->config, 'endpoints.' . $endpoint),
-            array_merge($options, ['q' => urlencode($query), '_' => time()]),
+        $_url = str_ireplace(['{query}', '{api_key}'], [$query, $this->apiKey], array_get($this->config, 'endpoints.search'));
+
+        $_result = $_json = $this->httpGet($_url . '&_=' . time(),
+            [],
             [
                 CURLOPT_HTTPHEADER => [
                     'content-type' => 'application/json',
                     'user-agent'   => \Request::server('http-user-agent'),
+                ],
+            ]);
+
+        is_string($_json) && $_result = json_decode($_json, true);
+
+        $_result = array_merge($_result,
+            [
+                'type'    => $endpoint,
+                'details' => [
+                    'response_time' => time(),
+                    'media_source'  => MediaDataSources::IMDB,
+                    'query_text'    => $query,
+                    'endpoint'      => $endpoint,
+                ],
+            ]);
+
+        $this->storeQuery($query, $_result, $endpoint, MediaDataSources::IMDB);
+
+        return ResponseFactory::make($_result);
+    }
+
+    /**
+     * @param string $endpoint
+     * @param string $query
+     * @param array  $options
+     *
+     * @return bool|PeopleResponse|TitleResponse
+     */
+    protected function doGet($query, $endpoint, $options = [])
+    {
+        if (false !== ($_cache = $this->checkQueryCache($query . $endpoint))) {
+            return ResponseFactory::make($_cache);
+        }
+
+        $_url = str_ireplace(['{query}', '{api_key}', '{time}'], [urlencode($query), $this->apiKey, time()], array_get($this->config, 'endpoints.' . $endpoint));
+
+        $_result = $_json = $this->httpGet($_url,
+            null,
+            [
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type' => 'application/json',
+                    'User-Agent'   => \Request::server('http-user-agent') ?: static::DEFAULT_USER_AGENT,
                 ],
             ]);
 

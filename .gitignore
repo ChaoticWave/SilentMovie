@@ -8,3 +8,4 @@ Homestead.yaml
 .env
 /.phpstorm.meta.php
 /vendor/chaoticwave/blue-velvet.setdev-on/
+/vendor/**/*.setdev-on/

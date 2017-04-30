@@ -1,7 +1,5 @@
 <?php namespace ChaoticWave\SilentMovie\Documents;
 
-use ChaoticWave\SilentMovie\Contracts\DocumentLike;
-
 class DocumentFactory
 {
     //******************************************************************************

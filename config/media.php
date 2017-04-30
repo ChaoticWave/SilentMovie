@@ -6,16 +6,14 @@ return [
     'apis'    => [
         'imdb' => [
             'service'   => 'imdb',
+            'api-key'   => env('IMDB_API_KEY'),
             'endpoints' => [
-                'person' => 'http://www.imdb.com/xml/find?json=1&nm=on',
-                'title'  => 'http://www.imdb.com/xml/find?json=1&tt=on',
-            ],
-        ],
-        'omdb' => [
-            'service'   => 'omdb',
-            'endpoints' => [
-                'person' => '',
-                'title'  => '',
+                'search' => 'http://imdb.wemakesites.net/api/search?q={query}&api_key={api_key}',
+                'get'    => 'http://imdb.wemakesites.net/api/{resource_id}?api_key={api_key}',
+                'person' => 'http://www.omdbapi.com/?r=json&t={query}&_={time}',
+                //'person' => 'http://www.imdb.com/xml/find?json=1&nm=on',
+                'title'  => 'http://www.omdbapi.com/?r=json&plot=short&t={query}&_={time}',
+                //'title'  => 'http://www.imdb.com/xml/find?json=1&tt=on',
             ],
         ],
     ],
