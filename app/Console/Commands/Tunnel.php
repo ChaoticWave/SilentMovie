@@ -1,8 +1,7 @@
 <?php namespace ChaoticWave\SilentMovie\Console\Commands;
 
-use ChaoticWave\SilentMovie\Database\Models\MediaEntity;
-use ChaoticWave\SilentMovie\Facades\ImdbApi;
-use ChaoticWave\SilentMovie\Responses\PeopleResponse;
+use ChaoticWave\SilentMovie\Database\Models\TmdbEntity;
+use Tmdb\Laravel\Facades\Tmdb;
 
 class Tunnel extends SilentMovieCommand
 {
@@ -13,7 +12,7 @@ class Tunnel extends SilentMovieCommand
     /** @inheritdoc */
     protected $signature = 'sm:tunnel {name : the name of the person}';
     /** @inheritdoc */
-    protected $description = 'Dig into one person and map their existance';
+    protected $description = 'Dig into one person and map their existence';
 
     //******************************************************************************
     //* Methods
@@ -22,41 +21,34 @@ class Tunnel extends SilentMovieCommand
     /** @inheritdoc */
     public function handle()
     {
+        $_choice = 0;
         $_name = trim($this->argument('name'));
 
         if (empty($_name)) {
             throw new \InvalidArgumentException('The "name" argument cannot be blank.');
         }
 
-        $_results = ImdbApi::searchPeople($_name);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $_response = Tmdb::getSearchApi()->searchPersons($_name);
 
-        $_exact = $_results->getExact();
+        if (empty($_response['results']) || count($_response['results']) > 1) {
+            $_names = [0 => 'Quit'];
 
-        if (!empty($_exact)) {
-            $_choice = $this->output->choice('More than one match was found. Please choose an individual to tunnel:',
-                array_values($_exact),
-                0);
+            foreach ($_response['results'] as $_index => $_item) {
+                $_names[] = ($_index + 1) . ' - ' . array_get($_item, 'name');
+            }
 
-            if ($_choice === 0) {
+            $_choice = $this->output->choice('More than one match was found. Please choose a single individual:' . PHP_EOL, implode(', ', $_names), 0);
+
+            if (0 === $_choice) {
                 exit(1);
             }
         }
 
-        /** @var \ChaoticWave\SilentMovie\Responses\Entity $_entity */
-        foreach ($_results->getMapping() as $_mapping) {
-            $_list = $_results->{'get' . $_mapping}();
+        $_results = $_response['results'][$_choice];
 
-            if (!empty($_list)) {
-                foreach ($_list as $_index => $_entity) {
-                    try {
-                        MediaEntity::upsertFromEntity($_entity, $_results instanceof PeopleResponse ? 'people' : 'title');
-                    } catch (\Exception $_ex) {
-                        \Log::error('Exception saving entity', $_entity->toArray());
-                    }
-                }
-            }
-        }
+        TmdbEntity::upsert($_results);
 
-        $this->writeln($_results->toJson(JSON_PRETTY_PRINT));
+        $this->writeln(json_encode($_results, JSON_PRETTY_PRINT));
     }
 }

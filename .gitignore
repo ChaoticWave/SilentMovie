@@ -1,6 +1,7 @@
 /node_modules
 /public/storage
 /storage/*.key
+/storage/**/*
 /vendor
 /.idea
 Homestead.json
@@ -9,3 +10,4 @@ Homestead.yaml
 /.phpstorm.meta.php
 /vendor/chaoticwave/blue-velvet.setdev-on/
 /vendor/**/*.setdev-on/
+/bootstrap/cache

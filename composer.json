@@ -17,7 +17,8 @@
         "chaoticwave/blue-velvet":     "1.0.*",
         "laravel/framework":           "5.4.*",
         "elasticsearch/elasticsearch": ">=2.0.0",
-        "php-tmdb/api":                "~2.1"
+        "php-tmdb/api":                "~2.1",
+        "php-tmdb/laravel":            "~1.0"
     },
     "require-dev":       {
         "fzaninotto/faker":            "~1.4",
