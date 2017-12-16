@@ -11,3 +11,4 @@ Homestead.yaml
 /vendor/chaoticwave/blue-velvet.setdev-on/
 /vendor/**/*.setdev-on/
 /bootstrap/cache
+/_ide_helper.php
