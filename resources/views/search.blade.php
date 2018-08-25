@@ -25,21 +25,31 @@
     </header>
 @endsection
 
+@section('refine')
+    <section id="refine-results">
+
+    </section>
+@endsection
+
 @section('content')
-    @if(!empty($search))
+    <section id="results">
         <div id="search-results" class="row">
             <div class="col-lg-12 panel-list">
-                <h2>Search results for query: <strong>{{ $searchQuery }}</strong></h2>
+                @if(!empty($search))
+                    <h2>Search results for query: <strong>{{ $searchQuery }}</strong></h2>
 
-                @foreach($search as $_type => $_typeList)
-                    @if(!empty($_typeList))
-                        @include('search-results-panel')
-                    @else
-                        <p>No <strong>{{ $_type }}</strong> matches</p>
-                    @endif
-                @endforeach
+                    @foreach($search as $_type => $_typeList)
+                        @if(!empty($_typeList))
+                            @include('search-results-panel')
+                        @else
+                            <p>No <strong>{{ $_type }}</strong> matches</p>
+                        @endif
+                    @endforeach
+                @else
+                    <h2>No Results</h2>
+                @endif
             </div>
         </div>
-    @endif
+    </section>
 @endsection
 

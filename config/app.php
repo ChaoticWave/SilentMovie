@@ -52,7 +52,7 @@ return [
         //******************************************************************************
         //* Third Party
         //******************************************************************************
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        // Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Tmdb\Laravel\TmdbServiceProvider::class,
     ],
     'aliases'         => [
