@@ -13,6 +13,7 @@ use ChaoticWave\SilentMovie\Facades\Elastic;
 use ChaoticWave\SilentMovie\Responses\PeopleResponse;
 use ChaoticWave\SilentMovie\Responses\ResponseFactory;
 use ChaoticWave\SilentMovie\Responses\TitleResponse;
+use Illuminate\Support\Facades\Request;
 
 class ImdbService extends BaseService implements SearchesMediaApis
 {
@@ -162,7 +163,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
             [
                 CURLOPT_HTTPHEADER => [
                     'Content-Type' => 'application/json',
-                    'User-Agent'   => \Request::server('http-user-agent') ?: static::DEFAULT_USER_AGENT,
+                    'User-Agent'   => Request::server('http-user-agent') ?: static::DEFAULT_USER_AGENT,
                 ],
             ]);
 
