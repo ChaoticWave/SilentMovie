@@ -41,6 +41,10 @@ class ImdbService extends BaseService implements SearchesMediaApis
      * @var string
      */
     const TITLE_ENDPOINT_NAME = 'title';
+    /**
+     * @var string
+     */
+    const SEARCH_ENDPOINT_NAME = 'search';
 
     //******************************************************************************
     //* Members
@@ -101,6 +105,19 @@ class ImdbService extends BaseService implements SearchesMediaApis
     public function searchTitle($text, $options = [])
     {
         return $this->doGet($text, static::TITLE_ENDPOINT_NAME, $options);
+    }
+
+    /**
+     * Find titles that contain $text
+     *
+     * @param string $text    The text to search for
+     * @param array  $options Options for the call
+     *
+     * @return ApiResponseLike
+     */
+    public function search($text, $options = [])
+    {
+        return $this->doGet($text, static::SEARCH_ENDPOINT_NAME, $options);
     }
 
     /**

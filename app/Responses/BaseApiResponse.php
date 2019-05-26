@@ -4,6 +4,7 @@ use ChaoticWave\SilentMovie\Contracts\ApiResponseLike;
 use ChaoticWave\SilentMovie\Enums\MediaDataSources;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 class BaseApiResponse implements ApiResponseLike
@@ -56,7 +57,7 @@ class BaseApiResponse implements ApiResponseLike
      */
     public function mappedArray()
     {
-        return array_only($this->toArray(), $this->getMapping());
+        return Arr::only($this->toArray(), $this->getMapping());
     }
 
     /**

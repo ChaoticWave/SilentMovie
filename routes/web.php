@@ -11,7 +11,7 @@ Route::get('/people/search', ['uses' => 'SiteController@search']);
 Route::get('/title/search', ['uses' => 'SiteController@search']);
 
 Route::post('/', ['uses' => 'ImdbController@peopleSearch']);
-Route::post('/search', ['uses' => 'ImdbController@peopleSearch']);
-Route::post('/people/search', ['uses' => 'ImdbController@peopleSearch']);
+Route::post('/search', ['uses' => 'ImdbController@search'])->name('imdb.search');
+Route::post('/people/search', ['uses' => 'ImdbController@search']);
 Route::post('/title/search', ['uses' => 'ImdbController@titleSearch']);
 

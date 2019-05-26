@@ -8,12 +8,12 @@
                     <div class="col-lg-offset-2 col-lg-8 col-lg-offset-2">
                         <h1>Search</h1>
                         <div class="inner-subtext">Enter the name of someone to search for and add it to the system.</div>
-                        <form class="form-horizontal" method="POST">
-                            {{ csrf_field() }}
+                        <form class="form-horizontal" method="POST" action="/search"> @csrf
                             <div class="form-group">
-                                <label for="search-person" class="col-lg-2 control-label">Person</label>
+                                <label for="search-search" class="col-lg-2 control-label">Search</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="search-person" name="search-person" placeholder="name, title, or terms">
+                                    <input type="text" class="form-control" id="search-search" name="search-search"
+                                           placeholder="name, title, or terms"/>
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Search</button>

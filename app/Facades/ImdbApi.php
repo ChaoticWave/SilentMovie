@@ -11,6 +11,7 @@ use ChaoticWave\SilentMovie\Services\ImdbService;
  *
  * @method static PeopleResponse searchPeople($term, $options = [])
  * @method static TitleResponse searchTitle($term, $options = [])
+ * @method static TitleResponse search($term, $options = [])
  */
 class ImdbApi extends BaseFacade
 {

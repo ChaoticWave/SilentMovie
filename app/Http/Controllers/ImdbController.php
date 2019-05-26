@@ -16,26 +16,26 @@ class ImdbController extends Controller
      */
     public function peopleSearch(Request $request)
     {
-        $_mapped = null;
+        $mapped = null;
 
-        if (!empty($_result = ImdbApi::searchPeople($_query = $request->get('search-person')))) {
-            $_mapped = $_result->mappedArray();
+        if (!empty($result = ImdbApi::searchPeople($query = $request->get('search-person')))) {
+            $mapped = $result->mappedArray();
 
-            foreach ($_mapped as $_type => &$_entities) {
-                foreach ($_entities ?: [] as $_id => &$_entity) {
-                    $_entity['name'] = $this->highlight($_entity['name'], $_query);;
-                    $_entity['link'] = 'http://www.imdb.com/name/' . $_id;
-                    $_entity['icon'] = empty($_entity['ingested_at']) ? 'fa-user-o ingest' : 'fa-user-circle ingested';
+            foreach ($mapped as $type => &$entities) {
+                foreach ($entities ?: [] as $id => &$entity) {
+                    $entity['name'] = $this->highlight($entity['name'], $query);;
+                    $entity['link'] = 'http://www.imdb.com/name/' . $id;
+                    $entity['icon'] = empty($entity['ingested_at']) ? 'fa-user-o ingest' : 'fa-user-circle ingested';
                 }
             }
         }
 
         return view('search',
             [
-                'search'       => $_mapped,
-                'searchQuery'  => $_query,
-                'searchText'   => var_export($_result, true),
-                'totalResults' => data_get($_result, 'totalResults'),
+                'search'       => $mapped,
+                'searchQuery'  => $query,
+                'searchText'   => var_export($result, true),
+                'totalResults' => data_get($result, 'totalResults'),
             ]);
     }
 
@@ -46,26 +46,56 @@ class ImdbController extends Controller
      */
     public function titleSearch(Request $request)
     {
-        $_mapped = null;
+        $mapped = null;
 
-        if (!empty($_result = ImdbApi::searchTitle($_query = $request->get('search-title')))) {
-            $_mapped = $_result->mappedArray();
+        if (!empty($result = ImdbApi::searchTitle($query = $request->get('search-title')))) {
+            $mapped = $result->mappedArray();
 
-            foreach ($_mapped as $_type => $_entities) {
-                foreach ($_entities ?: [] as $_id => $_entity) {
-                    $_mapped[$_type][$_id]['title'] = $this->highlight($_entity['title'], $_query);
-                    $_mapped[$_type][$_id]['link'] = 'http://www.imdb.com/title/' . $_id;
+            foreach ($mapped as $type => $entities) {
+                foreach ($entities ?: [] as $id => $entity) {
+                    $mapped[$type][$id]['title'] = $this->highlight($entity['title'], $query);
+                    $mapped[$type][$id]['link'] = 'http://www.imdb.com/title/' . $id;
                 }
             }
         }
 
         return view('search',
             [
-                'search'       => $_mapped,
-                'searchQuery'  => $_query,
-                'searchText'   => var_export($_result, true),
-                'totalResults' => data_get($_result, 'totalResults'),
+                'search'       => $mapped,
+                'searchQuery'  => $query,
+                'searchText'   => var_export($result, true),
+                'totalResults' => data_get($result, 'totalResults'),
             ]);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function search(Request $request)
+    {
+        $mapped = null;
+
+        if (!empty($result = ImdbApi::search($query = $request->get('search-search')))) {
+            $mapped = $result->mappedArray();
+
+            foreach ($mapped as $type => $entities) {
+                foreach ($entities ?: [] as $id => $entity) {
+                    $mapped[$type][$id]['title'] = $this->highlight($entity['title'], $query);
+                    $mapped[$type][$id]['link'] = 'http://www.imdb.com/title/' . $id;
+                }
+            }
+        }
+
+        return view('search',
+            [
+                'search'       => $mapped,
+                'searchQuery'  => $query,
+                'searchText'   => var_export($result, true),
+                'totalResults' => data_get($result, 'totalResults'),
+            ]
+        );
     }
 
     /**
@@ -76,13 +106,17 @@ class ImdbController extends Controller
      */
     protected function highlight($haystack, $needle)
     {
-        $_start = stripos($haystack, $needle);
+        $start = stripos($haystack, $needle);
 
-        if (false !== $_start) {
-            $_len = strlen($needle);
-            $_end = $_start + $_len;
+        if (false !== $start) {
+            $len = strlen($needle);
+            $end = $start + $len;
 
-            return substr($haystack, 0, $_start) . '<span class="highlighted">' . substr($haystack, $_start, $_len) . '</span>' . substr($haystack, $_end);
+            return substr($haystack, 0, $start) .
+                '<span class="highlighted">' .
+                substr($haystack, $start, $len) .
+                '</span>' .
+                substr($haystack, $end);
         }
 
         return $haystack;
