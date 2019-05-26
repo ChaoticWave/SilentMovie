@@ -14,8 +14,8 @@ use ChaoticWave\SilentMovie\Responses\PeopleResponse;
 use ChaoticWave\SilentMovie\Responses\ResponseFactory;
 use ChaoticWave\SilentMovie\Responses\TitleResponse;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Request;
 
 class ImdbService extends BaseService implements SearchesMediaApis
 {
