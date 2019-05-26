@@ -13,7 +13,9 @@ use ChaoticWave\SilentMovie\Facades\Elastic;
 use ChaoticWave\SilentMovie\Responses\PeopleResponse;
 use ChaoticWave\SilentMovie\Responses\ResponseFactory;
 use ChaoticWave\SilentMovie\Responses\TitleResponse;
-use Illuminate\Support\Facades\Request;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class ImdbService extends BaseService implements SearchesMediaApis
 {
@@ -114,14 +116,17 @@ class ImdbService extends BaseService implements SearchesMediaApis
             return ResponseFactory::make($_cache);
         }
 
-        $_url = str_ireplace(['{query}', '{api_key}'], [$query, $this->apiKey], array_get($this->config, 'endpoints.search'));
+        $_url = str_ireplace(['{query}', '{api_key}'],
+            [$query, $this->apiKey],
+            Arr::get($this->config, 'endpoints.search')
+        );
 
         $_result = $_json = $this->httpGet($_url . '&_=' . time(),
             [],
             [
                 CURLOPT_HTTPHEADER => [
                     'content-type' => 'application/json',
-                    'user-agent'   => \Request::server('http-user-agent'),
+                    'user-agent'   => Request::server('http-user-agent'),
                 ],
             ]);
 
@@ -156,7 +161,10 @@ class ImdbService extends BaseService implements SearchesMediaApis
             return ResponseFactory::make($_cache);
         }
 
-        $_url = str_ireplace(['{query}', '{api_key}', '{time}'], [urlencode($query), $this->apiKey, time()], array_get($this->config, 'endpoints.' . $endpoint));
+        $_url = str_ireplace(['{query}', '{api_key}', '{time}'],
+            [urlencode($query), $this->apiKey, time()],
+            Arr::get($this->config, 'endpoints.' . $endpoint)
+        );
 
         $_result = $_json = $this->httpGet($_url,
             null,
@@ -165,7 +173,8 @@ class ImdbService extends BaseService implements SearchesMediaApis
                     'Content-Type' => 'application/json',
                     'User-Agent'   => Request::server('http-user-agent') ?: static::DEFAULT_USER_AGENT,
                 ],
-            ]);
+            ]
+        );
 
         is_string($_json) && $_result = json_decode($_json, true);
 
@@ -209,8 +218,8 @@ class ImdbService extends BaseService implements SearchesMediaApis
      */
     protected function storeQuery($text, $result = null, $type = null, $source = MediaDataSources::IMDB)
     {
-        $result['media_source'] = $source = array_get($result, 'media_source', $source ?: MediaDataSources::IMDB);
-        $result['type'] = $type = array_get($result, 'type', $type ?: static::PERSON_ENDPOINT_NAME);
+        $result['media_source'] = $source = Arr::get($result, 'media_source', $source ?: MediaDataSources::IMDB);
+        $result['type'] = $type = Arr::get($result, 'type', $type ?: static::PERSON_ENDPOINT_NAME);
 
         $_model = null;
 
@@ -224,7 +233,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
                 'response_text'      => $result,
                 'response_date'      => Carbon::now(),
             ]);
-        } catch (\Exception $_ex) {
+        } catch (Exception $_ex) {
             $this->logError('Exception creating media query row: ' . $_ex->getMessage());
         }
 
@@ -249,7 +258,7 @@ class ImdbService extends BaseService implements SearchesMediaApis
 
         $this->logDebug('Response indexed', ['result' => $_result]);
 
-        if (null !== $model && null !== ($_id = array_get($_result, '_id'))) {
+        if (null !== $model && null !== ($_id = Arr::get($_result, '_id'))) {
             $model->update(['index_id_text' => $_id]);
         }
 

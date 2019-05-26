@@ -18,7 +18,7 @@
         "fideloper/proxy":             "^4.0",
         "laravel/framework":           "5.8.*",
         "laravel/tinker":              "^1.0",
-        "chaoticwave/blue-velvet":     "1.1.*",
+        "chaoticwave/blue-velvet":     "^1.1.0",
         "elasticsearch/elasticsearch": ">=2.0.0",
         "php-tmdb/api":                "~2.1",
         "php-tmdb/laravel":            "~1.1",
@@ -57,15 +57,9 @@
         }
     },
     "scripts":           {
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd":   [
-            "@php artisan key:generate"
-        ],
-        "post-autoload-dump":        [
+        "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover"
+            "@php artisan package:discover --ansi"
         ]
     },
     "config":            {
@@ -73,5 +67,6 @@
         "sort-packages":       true,
         "optimize-autoloader": true
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable":     true
 }
